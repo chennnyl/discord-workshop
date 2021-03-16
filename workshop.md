@@ -1,1 +1,0 @@
-C:/Users/Lynne Cure/Documents/obsidian/codeday/summer 21/Discord Bot Workshop.md
