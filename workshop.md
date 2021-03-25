@@ -38,7 +38,7 @@ It's good to clarify what exactly a bot is in Discord and what it can do. A bot,
 
 There are some really complicated and powerful bots out there -- you may have used some of them! But super complicated bots require super complicated code, and we don't want this to be too overwhelming. So we'll make a simpler bot, but it'll still be able to do something pretty cool! In this case, we'll make a bot that can act as a simple calculator. It'll be able to add, subtract, multiply, and divide numbers, as well as raise them to a given power. When we're finished, you'll be able to invoke it like this:
 
-![bot capabilities]("https://github.com/Spirati/discord-workshop/blob/main/img/bot%20capabilities.png")
+![bot capabilities]("https://github.com/Spirati/discord-workshop/blob/main/img/bot%20capabilities.png?raw=true")
 
 ## Getting started
 
