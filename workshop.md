@@ -1,5 +1,7 @@
 # Intro
+
 ## What is this workshop?
+
 This workshop is a hands-on guide to making a bot in Discord -- Discord bots have been popular projects for some time now, with no signs of slowing -- a popular bot listing website, [top.gg](https://top.gg) has Discord bots in as many as **one million servers**! In this workshop, we'll make a Discord bot that can act as a simple calculator in Python, a programming language commonly regarded as being simple enough to be approachable by beginners.
 
 # Setup
@@ -29,26 +31,26 @@ You'll want to get your bot on the server too. If you didn't, how would we test 
 # Building the bot!
 
 ## What exactly is a bot?
+
 It's good to clarify what exactly a bot is in Discord and what it can do. A bot, in Discord, is essentially like an automated user. The bot can act basically as much as a user can, if the user were omniscient and able to see every event that happened in every server they were in at once. Bots can read messages, send messages, join and play audio in voice channels, send direct messages, give and take roles, and much more, as long as each server it's in gives it permission to do so. We won't get too deep into the capabilities of bots in this workshop, though. What's important to know is that bots are a lot like regular Discord users, but they can do things often a lot better and a lot faster than a human!
 
 ## What do we want our bot to be able to do?
 
 There are some really complicated and powerful bots out there -- you may have used some of them! But super complicated bots require super complicated code, and we don't want this to be too overwhelming. So we'll make a simpler bot, but it'll still be able to do something pretty cool! In this case, we'll make a bot that can act as a simple calculator. It'll be able to add, subtract, multiply, and divide numbers, as well as raise them to a given power. When we're finished, you'll be able to invoke it like this:
 
-<!-- ![bot capabilities](C:\Users\Lynne Cure\Documents\obsidian\codeday\summer 21\bot capabilities.png) -->
+![bot capabilities](img/bot capabilities.png)
 
 ## Getting started
 
 ### Folder structure
 
-Getting a simple bot up and running with discord.py doesn't require a lot of code, but it does require a little bit of setup. Create a new folder somewhere, preferably within something like a projects folder (if you're using repl.it, you have a folder already, so you can skip this), and name it something descriptive. I'll choose `discord-workshop`. Then, make a new file, and name it `main.py`. This file will contain the main code that's necessary to get the bot connected to Discord. You'll also need to make a file named `.env`: this will contain some secret information that we don't want to be publicly viewable in our code if we show it to other people. Also make a folder called `cogs`: Don't worry about what it does for now; I'll explain in detail what this is for later, but for now all you need to know is that it'll hold most of the actual functionality of our calculator bot. When everything's set up, you should have a folder setup that's a little like this:
+Getting a simple bot up and running with discord.py doesn't require a lot of code, but it does require a little bit of setup. Create a new folder somewhere, preferably within something like a projects folder (if you're using repl.it, you have a folder already, so you can skip this), and name it something descriptive. I'll choose `discord-workshop`. Then, make a new file, and name it `main.py`. This file will contain the main code that's necessary to get the bot connected to Discord. You'll also need to make a file named `.env`: this will contain some secret information that we don't want to be publicly viewable in our code if we show it to other people. When everything's set up, you should have a folder setup that's a little like this:
 
 ```
 projects
 | - discord-workshop
     | - main.py
     | - .env
-    | - cogs
 ```
 
 ### Filling out `.env`
@@ -131,9 +133,80 @@ bot = commands.Bot(command_prefix='calc!')
 bot.run(TOKEN)
 ```
 
-This first line creates, or *instantiates* our bot using a special kind of function. This function doesn't just give us a value back like `os.getenv` or perform a function behind the scenes like `dotenv.load_dotenv`: it creates a structure that we can use and manipulate, known as a *class*: the word *class* as a whole usually refers to the underlying structure that each copy borrows from, so we call our bot, an individual copy of the `commands.Bot` class, a *class instance* instead. Don't worry too much about the specifics of classes right now; all you need to know is that `bot` refers to a copy of `commands.Bot`, which is a structure that can be used to manipulate Discord bots in code.
+This first line creates, or *instantiates* our bot using a special kind of function. This function doesn't just give us a value back like `os.getenv` or perform a function behind the scenes like `dotenv.load_dotenv`: it creates a structure that we can use and manipulate, known as a *class*: the word *class* as a whole usually refers to the underlying structure that each copy borrows from, so we call our bot, an individual copy of the `commands.Bot` class, a *class instance* instead. Don't worry too much about the specifics of classes right now; all you need to know is that `bot` refers to a copy of `commands.Bot`, which is a structure that can be used to manipulate Discord bots in code. The `command_prefix='calc!'` part of that line is a *named argument* given to the bot-creating function that tells it it should listen to messages that start with `calc!` to see if they contain commands.
 
 The second line is much simpler! It creates a connection to Discord using our bot token, which lets Discord know which bot to use.
 
-OK, we have our bot code all written out, how do we actually use it and make it so that our bot can come online? That requires running our script, `main.py`. 
+OK, we have our bot code all written out, how do we actually use it and make it so that our bot can come online? That requires running our script, `main.py`. Read the section corresponding to the environment you're working on your code from.
 
+##### REPL
+
+On REPL, this is as simple as hitting the big green play button.
+
+##### Windows
+
+Say your bot's folder is located at `C:\Users\<your_username>\Documents\projects\discord-workshop`. Open up a terminal (`cmd.exe`, Powershell, whatever you prefer). Run these two commands:
+
+- `cd C:\Users\<your_username>\Documents\projects\discord-workshop`
+
+- `python main.py`
+  - (If this command doesn't work, try `py main.py`)
+
+##### Linux/macOS
+
+Say your bot's folder is located at one of these locations: `/home/<your_username>/projects/discord-workshop` (most Linux distros) or `/Users/<your_username>/projects/discord-workshop`. Run these two commands:
+
+- `cd /home/<your_username>/projects/discord-workshop` (or the equivalent for your OS)
+- `python3 main.py`
+  - (If this command doesn't work, try `python main.py`)
+
+#### Uh... nothing happened.
+
+That's a good thing! That means none of our code was malformed. Still, we don't really know what our bot's up to. If you head over to your testing server, you might find that it's displaying as online, but that doesn't tell us a whole lot, and we can't interact with it yet. Let's add a little functionality to our bot that tells us once it's connected to Discord and ready to receive commands. After line 8 of `main.py` (the line that starts with `bot = commands.Bot...`), add the following lines:
+
+```python
+@bot.event
+async def on_ready():
+    print("Connected to Discord!")
+ 
+```
+
+The full structure of `main.py` should now look something like this:
+
+```python
+import os
+import dotenv
+import discord.ext.commands as commands
+
+dotenv.load_dotenv()
+
+bot = commands.Bot(command_prefix="calc!")
+
+@bot.event
+async def on_ready():
+    print("Connected to Discord!")
+
+bot.run(os.getenv("WORKSHOP_BOT_TOKEN"))
+```
+
+
+
+ #### What on *earth* does any of that mean??
+
+Now *that* is a very good question. This is a lot of unusual syntax that even longtime users of Python might find novel when first starting with `discord.py`. Let's break it down line-by-line once again.
+
+`@bot.event`
+
+This line tells us that the next couple lines of code are going to fire when our bot notices something happening. The `@` symbol indicates what's known in Python as a *decorator*. It basically indicates that the next section of code, usually a function, is going to have some extra processing done behind the scenes. 
+
+`async def on_ready():`
+
+This line means that we're defining a function. This particular kind of function is what's known as an *event handler*, as it contains the logic responsible for responding to events that our bot notices. Events in `discord.py` have special names that tell us what kinds of events they take care of. In this case, the `on_ready` event fires when our bot connects to Discord and is ready to receive input from users. The `async` keyword essentially means that it's able to run in the background, which lets our bot multitask multiple events and commands at once instead of being forced to handle them one at a time, which would be much slower.
+
+`print("Connected to Discord!")`
+
+This line just puts a little bit of text in the console, in this case telling us that we're connected to Discord. You may also notice that this line is *indented*. In Python, sections of code (often called *blocks*) are separated out through indentation, allowing us to see at a glance what the structure of our code is. 
+
+## Adding functionality: commands and more!
+
+The foundation and base functionality of our bot is done! All that remains is adding the command for running the calculator.
